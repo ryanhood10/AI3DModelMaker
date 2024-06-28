@@ -1,0 +1,17 @@
+{
+    "name": "ai-3d-model-maker",
+    "version": "1.0.0",
+    "engines": {
+      "node": "16.x",
+      "npm": "7.x"
+    },
+    "scripts": {
+      "start": "npm run start:backend",
+      "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
+      "start:backend": "cd backend && gunicorn app:app --log-file -"
+    },
+    "cacheDirectories": [
+      "frontend/node_modules"
+    ]
+  }
+  
