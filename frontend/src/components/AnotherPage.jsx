@@ -118,38 +118,44 @@ function AnotherPage() {
 
   const downloadCapture = async (slug) => {
     try {
-      const response = await axios({
-        // url: `http://127.0.0.1:5000/download_capture/${slug}`,
-        url: `https://ai-3d-model-maker-6bb8a109b792.herokuapp.com/download_capture/${slug}`,
-        method: 'GET',
-        responseType: 'blob', // Important
-        headers: { 'Authorization': `luma-api-key=${apiKey}` },
-      });
+        const response = await axios({
+            // url: `http://127.0.0.1:5000/download_capture/${slug}`,
+            url: `https://ai-3d-model-maker-6bb8a109b792.herokuapp.com/download_capture/${slug}`,
+            method: 'GET',
+            responseType: 'blob', // Important
+            headers: { 'Authorization': `luma-api-key=${apiKey}` },
+        });
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
 
-      // Extract file name from content-disposition header or use slug with .glb extension as default
-      const contentDisposition = response.headers['content-disposition'];
-      let fileName = slug + '.glb';
-      if (contentDisposition) {
-        const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
-        if (fileNameMatch.length === 2) {
-          fileName = fileNameMatch[1];
+        // Extract file name from content-disposition header or use slug with .glb extension as default
+        const contentDisposition = response.headers['content-disposition'];
+        let fileName = slug + '.glb';
+        if (contentDisposition) {
+            const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+            if (fileNameMatch && fileNameMatch.length === 2) {
+                fileName = fileNameMatch[1];
+            }
         }
-      }
-      link.setAttribute('download', fileName);
+        link.setAttribute('download', fileName);
 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
     } catch (error) {
-      console.error('Error downloading capture:', error);
-      setMessage('Failed to download capture.');
+        console.error('Error downloading capture:', error);
+        if (error.response) {
+            console.error('Error response data:', error.response.data);
+            console.error('Error response status:', error.response.status);
+            console.error('Error response headers:', error.response.headers);
+        }
+        setMessage('Failed to download capture.');
     }
-  };
+};
+
 
   const checkCredits = async () => {
     try {
