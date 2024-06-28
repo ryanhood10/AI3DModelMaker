@@ -39,7 +39,9 @@ function AnotherPage() {
 
   const handleCreateCapture = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:5000/create_capture', {
+      // const response = await axios.post('http://127.0.0.1:5000/create_capture', {
+        const response = await axios.post('https://ai-3d-model-maker-6bb8a109b792.herokuapp.com/create_capture', {
+
         title,
       }, {
         headers: {
@@ -70,7 +72,9 @@ function AnotherPage() {
       formData.append('file', file);
       formData.append('upload_url', upload_url);
 
-      const response = await axios.post('http://127.0.0.1:5000/upload_file', formData);
+      // const response = await axios.post('http://127.0.0.1:5000/upload_file', formData);
+      const response = await axios.post('https://ai-3d-model-maker-6bb8a109b792.herokuapp.com/upload_file', formData);
+
       setMessage(response.data.message);
 
       if (slug) {
@@ -88,7 +92,8 @@ function AnotherPage() {
 
   const triggerCapture = async (slug) => {
     try {
-      const response = await axios.post(`http://127.0.0.1:5000/trigger_capture/${slug}`, {}, {
+      // const response = await axios.post(`http://127.0.0.1:5000/trigger_capture/${slug}`, {}, {
+        const response = await axios.post(`https://ai-3d-model-maker-6bb8a109b792.herokuapp.com/trigger_capture/${slug}`, {}, {
         headers: { 'Authorization': `luma-api-key=${apiKey}` },
       });
       console.log(response.data);
@@ -114,7 +119,8 @@ function AnotherPage() {
   const downloadCapture = async (slug) => {
     try {
       const response = await axios({
-        url: `http://127.0.0.1:5000/download_capture/${slug}`,
+        // url: `http://127.0.0.1:5000/download_capture/${slug}`,
+        url: `https://ai-3d-model-maker-6bb8a109b792.herokuapp.com/download_capture/${slug}`,
         method: 'GET',
         responseType: 'blob', // Important
         headers: { 'Authorization': `luma-api-key=${apiKey}` },
@@ -160,7 +166,8 @@ function AnotherPage() {
 
   const getAllCaptures = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/get_all_captures', {
+      // const response = await axios.get('http://127.0.0.1:5000/get_all_captures', {
+        const response = await axios.get('https://ai-3d-model-maker-6bb8a109b792.herokuapp.com/get_all_captures', {
         headers: { 'Authorization': `luma-api-key=${apiKey}` },
       });
       setCaptures(response.data.captures);
