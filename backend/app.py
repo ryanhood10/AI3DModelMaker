@@ -28,6 +28,15 @@ def get_auth_headers():
     else:
         raise ValueError('Authorization header is missing')
 
+@app.route('/proxy/credits', methods=['GET'])
+def proxy_credits():
+    api_key = request.headers.get('Authorization')
+    headers = {
+        'Authorization': api_key
+    }
+    response = requests.get('https://webapp.engineeringlumalabs.com/api/v2/capture/credits', headers=headers)
+    return jsonify(response.json()), response.status_code
+
 def create_capture(capture_title):
     logger.debug(f"Creating capture with title: {capture_title}")
     auth_headers = get_auth_headers()

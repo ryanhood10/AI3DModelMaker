@@ -153,7 +153,8 @@ function AnotherPage() {
 
   const checkCredits = async () => {
     try {
-      const response = await axios.get('https://webapp.engineeringlumalabs.com/api/v2/capture/credits', {
+      // const response = await axios.get('https://webapp.engineeringlumalabs.com/api/v2/capture/credits', {
+        const response = await axios.get('https://ai-3d-model-maker-6bb8a109b792.herokuapp.com/proxy/credits', {
         headers: { 'Authorization': `luma-api-key=${apiKey}` },
       });
       console.log('API response:', response.data);
