@@ -1,3 +1,14 @@
+blinker==1.8.2
+certifi==2024.6.2
+charset-normalizer==2.0.12
+click==8.1.7
 Flask==2.0.3
-Flask-CORS==3.0.10
+Flask-Cors==3.0.10
+idna==3.7
+itsdangerous==2.2.0
+Jinja2==3.1.4
+MarkupSafe==2.1.5
 requests==2.26.0
+six==1.16.0
+urllib3==1.26.19
+Werkzeug==3.0.3
