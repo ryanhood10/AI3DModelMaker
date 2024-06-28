@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #37383B ;
+}
+
+@font-face {
+  font-family: "Nintendo";
+  src: url("../public/Nintendo.ttf") format("truetype");
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 ,
+th{
+  font-family: "Nintendo", sans-serif;
+}
+
+@font-face {
+  font-family: "MontserratAlternates-Regular";
+  src: url("../public/MontserratAlternates-Regular.otf") format("truetype");
+}
+
+p,
+li,
+a, 
+td{
+  font-family: "MontserratAlternates-Regular", sans-serif;
+}
+.font-custom {
+  font-family: 'Poppins', sans-serif;
+}
+/* @font-face {
+  font-family: 'JosefinSans';
+  src: url('../public/JosefinSans-Italic-VariableFont_wght.ttf') format('truetype');
+} */
