@@ -165,6 +165,7 @@ def download_capture_route(slug):
         # Ensure the download directory exists
         if not os.path.exists(DOWNLOAD_FOLDER):
             os.makedirs(DOWNLOAD_FOLDER)
+            logger.debug(f"Created download directory: {DOWNLOAD_FOLDER}")
 
         # Download the file from the URL
         file_response = requests.get(download_url, stream=True)
@@ -176,8 +177,12 @@ def download_capture_route(slug):
             for chunk in file_response.iter_content(chunk_size=8192):
                 if chunk:
                     f.write(chunk)
-
         logger.info(f"File downloaded successfully for slug {slug}")
+
+        # Check if the file was written correctly
+        if not os.path.exists(local_filename):
+            logger.error(f"File {local_filename} was not created successfully.")
+            return jsonify({'error': 'Failed to save downloaded file'}), 500
 
         # Send the file as a response
         return send_file(local_filename, as_attachment=True, mimetype='model/gltf-binary')
