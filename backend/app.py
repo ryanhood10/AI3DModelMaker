@@ -173,6 +173,7 @@ def download_capture_route(slug):
 
         # Save the file locally with the correct extension
         local_filename = os.path.join(DOWNLOAD_FOLDER, f"{slug}.glb")
+        logger.debug(f"Saving file to {local_filename}")
         with open(local_filename, 'wb') as f:
             for chunk in file_response.iter_content(chunk_size=8192):
                 if chunk:
