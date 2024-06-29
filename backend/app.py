@@ -141,7 +141,6 @@ def check_status_route(slug):
 @app.route('/download_capture/<slug>', methods=['GET'])
 def download_capture_route(slug):
     try:
-        logger.debug(f"Starting download for capture slug: {slug}")  # Added logging
         auth_headers = get_auth_headers()
         response = requests.get(
             f"https://webapp.engineeringlumalabs.com/api/v2/capture/{slug}",
@@ -149,7 +148,7 @@ def download_capture_route(slug):
         )
         response.raise_for_status()
         capture_data = response.json()
-        logger.debug(f"Capture data for slug {slug}: {capture_data}")  # Added logging
+        logger.debug(f"Capture data for slug {slug}: {capture_data}")
 
         latest_run = capture_data.get('latestRun', {})
         artifacts = latest_run.get('artifacts', [])
@@ -163,6 +162,10 @@ def download_capture_route(slug):
             logger.error("No .glb file found in artifacts")
             return jsonify({'error': 'No .glb file found in artifacts'}), 400
 
+        # Ensure the download directory exists
+        if not os.path.exists(DOWNLOAD_FOLDER):
+            os.makedirs(DOWNLOAD_FOLDER)
+
         # Download the file from the URL
         file_response = requests.get(download_url, stream=True)
         file_response.raise_for_status()
@@ -174,11 +177,12 @@ def download_capture_route(slug):
                 if chunk:
                     f.write(chunk)
 
-        logger.info(f"File downloaded successfully for slug {slug}")  # Added logging
-        # Use `download_name` for Python 3.9+
-        return send_file(local_filename, as_attachment=True, mimetype='model/gltf-binary', download_name=f"{slug}.glb")
+        logger.info(f"File downloaded successfully for slug {slug}")
+
+        # Send the file as a response
+        return send_file(local_filename, as_attachment=True, mimetype='model/gltf-binary')
     except Exception as e:
-        logger.error(f"Error downloading capture for slug {slug}: {e}")  # Added logging
+        logger.error(f"Error downloading capture: {e}")
         return jsonify({'error': 'Failed to download capture'}), 500
 
 
