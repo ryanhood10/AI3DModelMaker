@@ -5,14 +5,14 @@ import os
 import logging
 
 app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')  # Serve static files from React build directory
-CORS(app, resources={r"/*": {"origins": "*"}})  # Ensure CORS is enabled for all routes
+CORS(app)  # Enable CORS for all routes
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 UPLOAD_FOLDER = 'uploads'
-DOWNLOAD_FOLDER = 'downloads'
+DOWNLOAD_FOLDER = '/tmp'  # Use /tmp directory for Heroku
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Create necessary folders
@@ -27,15 +27,6 @@ def get_auth_headers():
         return {'Authorization': api_key}
     else:
         raise ValueError('Authorization header is missing')
-
-@app.route('/proxy/credits', methods=['GET'])
-def proxy_credits():
-    api_key = request.headers.get('Authorization')
-    headers = {
-        'Authorization': api_key
-    }
-    response = requests.get('https://webapp.engineeringlumalabs.com/api/v2/capture/credits', headers=headers)
-    return jsonify(response.json()), response.status_code
 
 def create_capture(capture_title):
     logger.debug(f"Creating capture with title: {capture_title}")
@@ -162,6 +153,8 @@ def download_capture_route(slug):
             logger.error("No .glb file found in artifacts")
             return jsonify({'error': 'No .glb file found in artifacts'}), 400
 
+        logger.debug(f"Download URL: {download_url}")
+
         # Ensure the download directory exists
         if not os.path.exists(DOWNLOAD_FOLDER):
             os.makedirs(DOWNLOAD_FOLDER)
@@ -184,6 +177,9 @@ def download_capture_route(slug):
         if not os.path.exists(local_filename):
             logger.error(f"File {local_filename} was not created successfully.")
             return jsonify({'error': 'Failed to save downloaded file'}), 500
+
+        file_size = os.path.getsize(local_filename)
+        logger.debug(f"File size: {file_size}")
 
         # Send the file as a response
         return send_file(local_filename, as_attachment=True, mimetype='model/gltf-binary')
@@ -214,7 +210,6 @@ def serve_react_app(path):
         return send_from_directory(app.static_folder, path)
     else:
         return send_from_directory(app.static_folder, 'index.html')
-
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
