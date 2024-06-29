@@ -156,29 +156,25 @@ def download_capture_route(slug):
             logger.error("Artifacts array is empty")
             return jsonify({'error': 'Download URL not found in capture data'}), 400
 
-        # Find the first .glb file in the artifacts
         download_url = next((artifact['url'] for artifact in artifacts if artifact['url'].endswith('.glb')), None)
         if not download_url:
             logger.error("No .glb file found in artifacts")
             return jsonify({'error': 'No .glb file found in artifacts'}), 400
 
-        # Download the file from the URL
         file_response = requests.get(download_url, stream=True)
         file_response.raise_for_status()
 
-        # Save the file locally with the correct extension
         local_filename = os.path.join(DOWNLOAD_FOLDER, f"{slug}.glb")
         with open(local_filename, 'wb') as f:
             for chunk in file_response.iter_content(chunk_size=8192):
                 if chunk:
                     f.write(chunk)
 
-        # Send the file as a response
-        return send_file(local_filename, as_attachment=True, mimetype='model/gltf-binary')
+        logger.info(f"File downloaded successfully for slug {slug}")
+        return send_file(local_filename, as_attachment=True, mimetype='model/gltf-binary', download_name=f"{slug}.glb")
     except Exception as e:
         logger.error(f"Error downloading capture: {e}")
         return jsonify({'error': 'Failed to download capture'}), 500
-
 
 @app.route('/get_all_captures', methods=['GET'])
 def get_all_captures_route():
