@@ -141,6 +141,7 @@ def check_status_route(slug):
 @app.route('/download_capture/<slug>', methods=['GET'])
 def download_capture_route(slug):
     try:
+        logger.debug(f"Starting download for capture slug: {slug}")  # Added logging
         auth_headers = get_auth_headers()
         response = requests.get(
             f"https://webapp.engineeringlumalabs.com/api/v2/capture/{slug}",
@@ -148,7 +149,7 @@ def download_capture_route(slug):
         )
         response.raise_for_status()
         capture_data = response.json()
-        logger.debug(f"Capture data for slug {slug}: {capture_data}")
+        logger.debug(f"Capture data for slug {slug}: {capture_data}")  # Added logging
 
         latest_run = capture_data.get('latestRun', {})
         artifacts = latest_run.get('artifacts', [])
@@ -156,25 +157,30 @@ def download_capture_route(slug):
             logger.error("Artifacts array is empty")
             return jsonify({'error': 'Download URL not found in capture data'}), 400
 
+        # Find the first .glb file in the artifacts
         download_url = next((artifact['url'] for artifact in artifacts if artifact['url'].endswith('.glb')), None)
         if not download_url:
             logger.error("No .glb file found in artifacts")
             return jsonify({'error': 'No .glb file found in artifacts'}), 400
 
+        # Download the file from the URL
         file_response = requests.get(download_url, stream=True)
         file_response.raise_for_status()
 
+        # Save the file locally with the correct extension
         local_filename = os.path.join(DOWNLOAD_FOLDER, f"{slug}.glb")
         with open(local_filename, 'wb') as f:
             for chunk in file_response.iter_content(chunk_size=8192):
                 if chunk:
                     f.write(chunk)
 
-        logger.info(f"File downloaded successfully for slug {slug}")
+        logger.info(f"File downloaded successfully for slug {slug}")  # Added logging
+        # Use `download_name` for Python 3.9+
         return send_file(local_filename, as_attachment=True, mimetype='model/gltf-binary', download_name=f"{slug}.glb")
     except Exception as e:
-        logger.error(f"Error downloading capture: {e}")
+        logger.error(f"Error downloading capture for slug {slug}: {e}")  # Added logging
         return jsonify({'error': 'Failed to download capture'}), 500
+
 
 @app.route('/get_all_captures', methods=['GET'])
 def get_all_captures_route():
