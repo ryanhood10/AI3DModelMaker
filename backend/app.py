@@ -66,7 +66,7 @@ def create_capture_route():
         return response
     except Exception as e:
         logger.error(f"Error creating capture: {e}")
-        return jsonify({'error': 'Failed to create capture'}), 500
+        return jsonify({'error': 'Failed to create capture. Please ensure you have saved your API Key and try again.'}), 500
 
 @app.route('/upload_file', methods=['OPTIONS', 'POST'])
 def upload_file_route():
@@ -99,7 +99,7 @@ def upload_file_route():
         return response
     except Exception as e:
         logger.error(f"Error uploading file: {e}")
-        return jsonify({'error': 'Failed to upload file'}), 500
+        return jsonify({'error': 'Failed to upload file. Please ensure you have saved your API Key and try again.'}), 500
 
 @app.route('/trigger_capture/<slug>', methods=['POST'])
 def trigger_capture_route(slug):
@@ -113,7 +113,7 @@ def trigger_capture_route(slug):
         return jsonify(response.json())
     except Exception as e:
         logger.error(f"Error triggering capture: {e}")
-        return jsonify({'error': 'Failed to trigger capture'}), 500
+        return jsonify({'error': 'Failed to trigger capture. Please ensure you have saved your API Key and try again.'}), 500
 
 @app.route('/status/<slug>', methods=['GET'])
 def check_status_route(slug):
@@ -127,7 +127,7 @@ def check_status_route(slug):
         return jsonify(response.json())
     except Exception as e:
         logger.error(f"Error checking status: {e}")
-        return jsonify({'error': 'Failed to check status'}), 500
+        return jsonify({'error': 'Failed to check status. Please ensure you have saved your API Key and try again.'}), 500
 
 @app.route('/download_capture/<slug>', methods=['GET'])
 def download_capture_route(slug):
@@ -200,7 +200,7 @@ def get_all_captures_route():
         return jsonify(response.json())
     except Exception as e:
         logger.error(f"Error fetching captures: {e}")
-        return jsonify({'error': 'Failed to fetch captures'}), 500
+        return jsonify({'error': 'Failed to fetch captures. Please ensure you have saved your API Key and try again.'}), 500
 
 # Serve React App
 @app.route('/', defaults={'path': ''})

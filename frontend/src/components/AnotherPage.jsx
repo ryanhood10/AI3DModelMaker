@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import LumaLogo from '../assets/LumaAILogo.png'
+import {  FaArrowLeft } from 'react-icons/fa'; // Importing relevant icons
+import { Link } from 'react-router-dom';import LumaLogo from '../assets/LumaAILogo.png'
 
 function AnotherPage() {
   const [file, setFile] = useState(null);
@@ -191,129 +191,155 @@ function AnotherPage() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-8 text-center">Upload a Video</h1>
-      <div className="flex flex-col items-center">
-        <input type="file" onChange={handleFileChange} className="mb-4 p-2 border border-gray-700 rounded bg-gray-800 text-white" />
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={handleTitleChange}
-          className="mb-4 p-2 border border-gray-700 rounded bg-gray-800 text-white"
-        />
-        <input
-          type="text"
-          placeholder="Enter API Key"
-          value={apiKey}
-          onChange={handleApiKeyChange}
-          className="mb-4 p-2 border border-gray-700 rounded bg-gray-800 text-white"
-        />
- <p className='flex p-2 text-white items-center'>
-        You can obtain an Api Key from 
-        <a href='https://lumalabs.ai/' className='flex text-blue-500 hover:text-blue-700 items-center ml-1'>
-          Luma AI 
-          <img className="h-4 ml-1" src={LumaLogo} alt="Luma Logo"/>
-        </a>
-      </p>    
-          <button
-          onClick={() => localStorage.setItem('api_key', apiKey)}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2"
-        >
-          {localStorage.getItem('api_key') ? 'Change Key' : 'Save Key'}
-        </button>
-        {localStorage.getItem('api_key') && (
-          <button
-            onClick={() => {
-              localStorage.removeItem('api_key');
-              setApiKey('');
-            }}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-2"
-          >
-            Delete Key
+    <div className="bg-gray-900 min-h-screen py-12 relative">
+        {/* Homepage Link with Arrow */}
+        <Link
+        to="/"
+        className="absolute top-4 left-52 flex items-center text-cyan-500 hover:text-cyan-300 transition duration-300 text-lg font-bold"
+      >
+        <FaArrowLeft className="mr-2" />
+        Homepage
+      </Link>
+      <div className="max-w-5xl mx-auto bg-gray-800 p-8 md:p-16 rounded-lg shadow-xl relative">
+        {/* Header */}
+        <h1 className="text-4xl font-bold mb-8 text-center text-white">Upload a Video</h1>
+
+        {/* Upload Form */}
+        <div className="flex flex-col items-center space-y-6">
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="w-full md:w-2/3 p-2 border border-gray-600 rounded bg-gray-700 text-white"
+          />
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={handleTitleChange}
+            className="w-full md:w-2/3 p-2 border border-gray-600 rounded bg-gray-700 text-white"
+          />
+         <div className="grid grid-cols-4 gap-4 items-center">
+  <input
+    type="text"
+    placeholder="Enter API Key"
+    value={apiKey}
+    onChange={handleApiKeyChange}
+    className="col-span-3 w-full p-2 border border-gray-600 rounded bg-gray-700 text-white justify-self-start"
+  />
+  
+  {/* Save/Delete Key Buttons */}
+  <div className="col-span-1  flex justify-end">
+    <button
+      onClick={() => localStorage.setItem('api_key', apiKey)}
+      className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+    >
+      {localStorage.getItem('api_key') ? 'Change Key' : 'Save Key'}
+    </button>
+    {localStorage.getItem('api_key') && (
+      <button
+        onClick={() => {
+          localStorage.removeItem('api_key');
+          setApiKey('');
+        }}
+        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+      >
+        Delete Key
+      </button>
+    )}
+  </div>
+</div>
+
+
+          <p className="flex p-2 text-white items-center">
+            You can obtain an API Key from 
+            <a href="https://lumalabs.ai/" className="text-blue-400 hover:text-blue-600 ml-1 flex items-center">
+              Luma AI 
+              <img className="h-4 ml-1" src={LumaLogo} alt="Luma Logo" />
+            </a>
+          </p>
+
+        
+
+          {/* Upload Button */}
+          <button onClick={handleUpload} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            Generate 3D Model
           </button>
-        )}
-        <button onClick={handleUpload} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2">
-          Upload
-        </button>
-        {loading && (
-          <div className="mt-4">
-            <div className="w-full bg-gray-200 rounded-full">
-              <div className="bg-blue-500 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full" style={{ width: '100%' }}>
-                Uploading...
-              </div>
-            </div>
-          </div>
-        )}
-        <p className="mt-4 text-center">{message}</p>
-        {/* <p className="mt-4 text-center">{status}</p> */}
-        <p className="mt-4 text-center">{credits}</p>
-        <br />
-        <button onClick={checkCredits} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-2">
-          Check Credits
-        </button>
-        <button onClick={getAllCaptures} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-2">
-          Get All Captures
-        </button>
-        {captures.length > 0 && (
-          <div className="mt-4 w-full">
-            <h2 className="text-2xl font-bold mb-4 text-center">All Captures</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {currentCaptures.map((capture, index) => (
-                <div key={index} className="bg-gray-800 p-4 rounded-lg shadow-lg">
-                  <h3 className="text-xl font-bold text-white">{capture.title}</h3>
-                  <p className="text-gray-400"><strong>Slug:</strong> {capture.slug}</p>
-                  <p className="text-gray-400"><strong>Status:</strong> {capture.status}</p>
-                  <p className="text-gray-400"><strong>Date:</strong> {new Date(capture.date).toLocaleString()}</p>
-                  <p className="text-gray-400"><strong>Type:</strong> {capture.type}</p>
-                  {capture.latestRun && (
-                    <div className="mt-2">
-                      <p className="text-gray-400"><strong>Latest Run Status:</strong> {capture.latestRun.status}</p>
-                      <p className="text-gray-400"><strong>Progress:</strong> {capture.latestRun.progress}%</p>
-                      <p className="text-gray-400"><strong>Current Stage:</strong> {capture.latestRun.currentStage}</p>
-                    </div>
-                  )}
-                  <button onClick={() => downloadCapture(capture.slug)} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded mt-4">
-                    Download
-                  </button>
+
+          {loading && (
+            <div className="w-full max-w-md mt-4">
+              <div className="w-full bg-gray-700 rounded-full">
+                <div className="bg-blue-500 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full" style={{ width: '100%' }}>
+                  Uploading...
                 </div>
-              ))}
-            </div>
-            <div className="flex justify-center mt-4">
-              {Array.from({ length: Math.ceil(captures.length / capturesPerPage) }, (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => paginate(index + 1)}
-                  className={`mx-1 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300'}`}
-                >
-                  {index + 1}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-        {/* {slugs.length > 0 && (
-          <>
-            {slugs.map((slug, index) => (
-              <div key={index} className="flex flex-col items-center mt-4">
-                <button onClick={() => checkStatus(slug)} className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-2">
-                  Check Status ({slug})
-                </button>
-                <button onClick={() => downloadCapture(slug)} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded mb-2">
-                  Download Capture ({slug})
-                </button>
               </div>
-            ))}
-          </>
-        )} */}
-      </div>
-      <div className="mt-8 flex flex-col items-center">
-        <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mb-2">
-          <Link to="/">Main Page</Link>
-        </button>
+            </div>
+          )}
+
+          {/* Status Messages */}
+          <p className="mt-4 text-center text-gray-400">{message}</p>
+          <p className="mt-4 text-center text-gray-400">{credits}</p>
+
+          {/* Check Credits / Get All Captures */}
+          <div className="flex space-x-4 mt-4">
+            <button onClick={checkCredits} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+              Check Credits
+            </button>
+            <button onClick={getAllCaptures} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+              Get All Captures
+            </button>
+          </div>
+
+          {/* Captures Display */}
+          {captures.length > 0 && (
+            <div className="w-full mt-8">
+              <h2 className="text-2xl font-bold mb-4 text-center text-white">All Captures</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {currentCaptures.map((capture, index) => (
+                  <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
+                    <h3 className="text-xl font-bold text-white">{capture.title}</h3>
+                    <p className="text-gray-400"><strong>Slug:</strong> {capture.slug}</p>
+                    <p className="text-gray-400"><strong>Status:</strong> {capture.status}</p>
+                    <p className="text-gray-400"><strong>Date:</strong> {new Date(capture.date).toLocaleString()}</p>
+                    <p className="text-gray-400"><strong>Type:</strong> {capture.type}</p>
+                    {capture.latestRun && (
+                      <div className="mt-2">
+                        <p className="text-gray-400"><strong>Latest Run Status:</strong> {capture.latestRun.status}</p>
+                        <p className="text-gray-400"><strong>Progress:</strong> {capture.latestRun.progress}%</p>
+                        <p className="text-gray-400"><strong>Current Stage:</strong> {capture.latestRun.currentStage}</p>
+                      </div>
+                    )}
+                    <button onClick={() => downloadCapture(capture.slug)} className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded mt-4">
+                      Download
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-center mt-4">
+                {Array.from({ length: Math.ceil(captures.length / capturesPerPage) }, (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => paginate(index + 1)}
+                    className={`mx-1 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-600 text-gray-300'}`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Back to Main Page */}
+        <div className="mt-8 flex justify-center">
+          <Link to="/">
+            <button className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+              Home Page
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default AnotherPage;
