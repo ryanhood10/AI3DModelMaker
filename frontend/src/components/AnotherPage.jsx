@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {  FaArrowLeft, FaEyeSlash, FaEye } from 'react-icons/fa'; // Importing relevant icons
+import { FaKey, FaArrowLeft, FaEyeSlash, FaEye } from 'react-icons/fa'; // Importing relevant icons
 import { Link } from 'react-router-dom';import LumaLogo from '../assets/LumaAILogo.png'
 
 function AnotherPage() {
@@ -14,7 +14,7 @@ function AnotherPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [apiKey, setApiKey] = useState(localStorage.getItem('api_key') || '');
-  const [showApiKey, setShowApiKey] = useState(true); // New state for toggling API key visibility
+  const [showApiKey, setShowApiKey] = useState(false); // New state for toggling API key visibility
 
   const capturesPerPage = 9;
 
@@ -220,6 +220,7 @@ function AnotherPage() {
             className="w-full md:w-2/3 p-2 border border-gray-600 rounded bg-gray-700 text-white"
           />
         <div className="grid grid-cols-3 gap-4 items-center">
+          <div className='flex w-full col-span-2 space-x-2'>
   {/* Input field for API Key */}
   <input
     type={showApiKey ? 'text' : 'password'} // Toggle between text and password based on showApiKey
@@ -228,38 +229,47 @@ function AnotherPage() {
     onChange={handleApiKeyChange}
     className="col-span-2 w-full p-2 border border-gray-600 rounded bg-gray-700 text-white justify-self-start"
   />
-
-  {/* Toggle Eye Icon, Save Key, and Delete Key Buttons */}
-  <div className="col-span-1 space-x-2 flex justify-end sm:flex-col sm:space-y-2 sm:space-x-0 sm:justify-start">
-    {/* Eye Icon */}
-    <button
+  {/* Eye Icon */}
+  <button
       onClick={() => setShowApiKey(!showApiKey)} // Toggle visibility
       className="text-gray-400 hover:text-gray-200 transition ml-2 sm:ml-0"
     >
       {showApiKey ? <FaEyeSlash className="h-6 w-6" /> : <FaEye className="h-6 w-6" />} {/* Eye icon */}
     </button>
-
+</div>
+  {/* Toggle Eye Icon, Save Key, and Delete Key Buttons */}
+  <div className="col-span-1 space-x-2 flex justify-end sm:flex-col sm:space-y-2 sm:space-x-0 sm:justify-start">
+    
     {/* Save Key Button */}
     <button
       onClick={() => localStorage.setItem('api_key', apiKey)}
-      className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-    >
-      {localStorage.getItem('api_key') ? 'Change Key' : 'Save Key'}
+      className="bg-transparent text-blue-500 font-bold py-2 px-4 rounded flex items-center space-x-2 border border-blue-500
+      shadow-md shadow-blue-500/50 hover:bg-blue-500 hover:text-white transition-all duration-300"
+    >  <FaKey className="h-5 w-5" />
+     <span> {localStorage.getItem('api_key') ? 'Change Key' : 'Save Key'}</span>
     </button>
 
-    {/* Delete Key Button */}
-    {localStorage.getItem('api_key') && (
-      <button
-        onClick={() => {
-          localStorage.removeItem('api_key');
-          setApiKey('');
-        }}
-        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-      >
-        Delete Key
-      </button>
-    )}
+   
+
   </div>
+  <div className="w-full flex justify-end">
+  {localStorage.getItem('api_key') && (
+    <button
+      onClick={() => {
+        localStorage.removeItem('api_key');
+        setApiKey('');
+      }}
+      className="bg-transparent text-red-500 font-bold py-2 px-4 rounded flex items-center space-x-2 border border-red-500
+      shadow-md shadow-red-500/50 hover:bg-red-500 hover:text-white transition-all duration-300"
+    >
+      <FaKey className="h-5 w-5" />
+      <span>Delete Key</span>
+    </button>
+  )}
+</div>
+
+
+
 </div>
 
 
