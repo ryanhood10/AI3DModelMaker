@@ -61,13 +61,40 @@ const BestPractices = () => {
   return (
     <div className="bg-gray-900 min-h-screen text-white py-12 px-6 relative">
       {/* Homepage Link with Arrow */}
-      <Link
-        to="/"
-        className="absolute top-4 left-52 flex items-center text-cyan-500 hover:text-cyan-300 transition duration-300 text-lg font-bold"
-      >
-        <FaArrowLeft className="mr-2" />
-        Homepage
-      </Link>
+<Link
+  to="/"
+  className="absolute top-4 left-16 md:left-24 xl:left-36 lg:left-52 flex items-center text-cyan-500 hover:text-cyan-300 transition duration-300 text-lg font-bold"
+>
+  <FaArrowLeft className="mr-2" />
+  Homepage
+</Link>
+
+      <div className="max-w-4xl mx-auto space-y-6">
+
+      <section className="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+  <h2 className="text-2xl font-bold text-blue-400 mb-4">
+    Steps to Use the <span className='font-custom text-3xl'>3</span>D Model Maker App
+  </h2>
+  <ol className="list-decimal list-inside space-y-4">
+    <li>
+      <span className="font-bold text-blue-400">Step 1:</span> Take a 360° video scan of your object, following the "Best Practices" for camera settings and lighting.
+    </li>
+    <li>
+      <span className="font-bold text-blue-400">Step 2:</span> Visit Luma AI to obtain your free API key.
+    </li>
+    <li>
+      <span className="font-bold text-blue-400">Step 3:</span> Upload your 360° video, enter a title, and input your API key into the app. Click "Generate 3D Model."
+    </li>
+    <li>
+      <span className="font-bold text-blue-400">Step 4:</span> Wait a few minutes for the AI to process and generate your 3D model.
+    </li>
+    <li>
+      <span className="font-bold text-blue-400">Step 5:</span> Download your 3D model, which can be used for gaming, product pages, and marketing.
+    </li>
+  </ol>
+</section>
+</div>
+
 
       <div className="max-w-4xl mx-auto space-y-6">
         {sections.map((section, index) => (

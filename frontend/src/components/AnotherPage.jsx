@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {  FaArrowLeft } from 'react-icons/fa'; // Importing relevant icons
+import {  FaArrowLeft, FaEyeSlash, FaEye } from 'react-icons/fa'; // Importing relevant icons
 import { Link } from 'react-router-dom';import LumaLogo from '../assets/LumaAILogo.png'
 
 function AnotherPage() {
@@ -14,6 +14,7 @@ function AnotherPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [apiKey, setApiKey] = useState(localStorage.getItem('api_key') || '');
+  const [showApiKey, setShowApiKey] = useState(true); // New state for toggling API key visibility
 
   const capturesPerPage = 9;
 
@@ -194,13 +195,13 @@ function AnotherPage() {
     <div className="bg-gray-900 min-h-screen py-12 relative">
         {/* Homepage Link with Arrow */}
         <Link
-        to="/"
-        className="absolute top-4 left-52 flex items-center text-cyan-500 hover:text-cyan-300 transition duration-300 text-lg font-bold"
-      >
-        <FaArrowLeft className="mr-2" />
-        Homepage
-      </Link>
-      <div className="max-w-5xl mx-auto bg-gray-800 p-8 md:p-16 rounded-lg shadow-xl relative">
+  to="/"
+  className="absolute top-4 left-16 md:left-24 xl:left-36 lg:left-52 flex items-center text-cyan-500 hover:text-cyan-300 transition duration-300 text-lg font-bold"
+>
+  <FaArrowLeft className="mr-2" />
+  Homepage
+</Link>
+      <div className="max-w-4xl mx-auto bg-gray-800 p-8 md:p-16 rounded-lg shadow-xl relative">
         {/* Header */}
         <h1 className="text-4xl font-bold mb-8 text-center text-white">Upload a Video</h1>
 
@@ -218,23 +219,35 @@ function AnotherPage() {
             onChange={handleTitleChange}
             className="w-full md:w-2/3 p-2 border border-gray-600 rounded bg-gray-700 text-white"
           />
-         <div className="grid grid-cols-4 gap-4 items-center">
+        <div className="grid grid-cols-3 gap-4 items-center">
+  {/* Input field for API Key */}
   <input
-    type="text"
+    type={showApiKey ? 'text' : 'password'} // Toggle between text and password based on showApiKey
     placeholder="Enter API Key"
     value={apiKey}
     onChange={handleApiKeyChange}
-    className="col-span-3 w-full p-2 border border-gray-600 rounded bg-gray-700 text-white justify-self-start"
+    className="col-span-2 w-full p-2 border border-gray-600 rounded bg-gray-700 text-white justify-self-start"
   />
-  
-  {/* Save/Delete Key Buttons */}
-  <div className="col-span-1  flex justify-end">
+
+  {/* Toggle Eye Icon, Save Key, and Delete Key Buttons */}
+  <div className="col-span-1 space-x-2 flex justify-end sm:flex-col sm:space-y-2 sm:space-x-0 sm:justify-start">
+    {/* Eye Icon */}
+    <button
+      onClick={() => setShowApiKey(!showApiKey)} // Toggle visibility
+      className="text-gray-400 hover:text-gray-200 transition ml-2 sm:ml-0"
+    >
+      {showApiKey ? <FaEyeSlash className="h-6 w-6" /> : <FaEye className="h-6 w-6" />} {/* Eye icon */}
+    </button>
+
+    {/* Save Key Button */}
     <button
       onClick={() => localStorage.setItem('api_key', apiKey)}
       className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
     >
       {localStorage.getItem('api_key') ? 'Change Key' : 'Save Key'}
     </button>
+
+    {/* Delete Key Button */}
     {localStorage.getItem('api_key') && (
       <button
         onClick={() => {
@@ -250,13 +263,7 @@ function AnotherPage() {
 </div>
 
 
-          <p className="flex p-2 text-white items-center">
-            You can obtain an API Key from 
-            <a href="https://lumalabs.ai/" className="text-blue-400 hover:text-blue-600 ml-1 flex items-center">
-              Luma AI 
-              <img className="h-4 ml-1" src={LumaLogo} alt="Luma Logo" />
-            </a>
-          </p>
+
 
         
 
@@ -265,20 +272,32 @@ function AnotherPage() {
             Generate 3D Model
           </button>
 
-          {loading && (
-            <div className="w-full max-w-md mt-4">
-              <div className="w-full bg-gray-700 rounded-full">
-                <div className="bg-blue-500 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full" style={{ width: '100%' }}>
-                  Uploading...
-                </div>
-              </div>
-            </div>
-          )}
+         {/* Conditional rendering based on loading state */}
+{loading ? (
+  <div className="w-full max-w-md mt-4">
+    <div className="w-full bg-gray-700 rounded-full">
+      <div className="bg-blue-500 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full" style={{ width: '100%' }}>
+        Uploading...
+      </div>
+    </div>
+  </div>
+) : (
+  <p className="flex p-2 text-white items-center">
+    You can obtain an API Key from 
+    <a href="https://lumalabs.ai/dream-machine/api/keys" className="text-blue-400 hover:text-blue-600 ml-1 flex items-center">
+      Luma AI 
+      <img className="h-4 ml-1" src={LumaLogo} alt="Luma Logo" />
+    </a>
+  </p>
+)}
+
 
           {/* Status Messages */}
-          <p className="mt-4 text-center text-gray-400">{message}</p>
+          <p className={`mt-4 text-center ${message.includes('Failed') ? 'text-red-500' : 'text-green-500'}`}>
+  {message}
+</p>
           <p className="mt-4 text-center text-gray-400">{credits}</p>
-
+          <hr className="border-gray-300 py-2 w-full" />
           {/* Check Credits / Get All Captures */}
           <div className="flex space-x-4 mt-4">
             <button onClick={checkCredits} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
@@ -328,6 +347,8 @@ function AnotherPage() {
             </div>
           )}
         </div>
+
+        <hr className="border-gray-300 py-2 mt-8 w-full" />
 
         {/* Back to Main Page */}
         <div className="mt-8 flex justify-center">
