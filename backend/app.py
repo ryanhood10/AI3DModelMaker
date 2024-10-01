@@ -68,6 +68,28 @@ def create_capture_route():
         logger.error(f"Error creating capture: {e}")
         return jsonify({'error': 'Failed to create capture. Please ensure you have saved your API Key and try again.'}), 500
 
+@app.route('/proxy/credits', methods=['GET'])
+def check_credits():
+    try:
+        # Get authorization headers (the API key)
+        auth_headers = get_auth_headers()
+
+        # Make the request to Luma AI credits API
+        response = requests.get(
+            "https://webapp.engineeringlumalabs.com/api/v2/capture/credits",
+            headers=auth_headers
+        )
+
+        # Raise an error if the response status code is not 200
+        response.raise_for_status()
+
+        # Return the JSON response
+        return jsonify(response.json())
+
+    except Exception as e:
+        logger.error(f"Error checking credits: {e}")
+        return jsonify({'error': 'Failed to check credits. Please ensure you have saved your API Key and try again.'}), 500
+
 @app.route('/upload_file', methods=['OPTIONS', 'POST'])
 def upload_file_route():
     if request.method == 'OPTIONS':
