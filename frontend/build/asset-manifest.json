@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.efa1f7b1.css",
-    "main.js": "/static/js/main.16ff1f71.js",
+    "main.css": "/static/css/main.56206090.css",
+    "main.js": "/static/js/main.2c16476d.js",
     "static/js/453.8ab44547.chunk.js": "/static/js/453.8ab44547.chunk.js",
     "static/media/MontserratAlternates-Regular.otf": "/static/media/MontserratAlternates-Regular.a5a4219b37b4e2270a3c.otf",
     "static/media/LumaAILogo.png": "/static/media/LumaAILogo.618056c3943d34a8ef58.png",
     "static/media/PalmtreeLeftLogo.webp": "/static/media/PalmtreeLeftLogo.aaae4baa9ff3447bbfd8.webp",
     "static/media/Nintendo.ttf": "/static/media/Nintendo.1ea1cfdceecd230b3335.ttf",
     "index.html": "/index.html",
-    "main.efa1f7b1.css.map": "/static/css/main.efa1f7b1.css.map",
-    "main.16ff1f71.js.map": "/static/js/main.16ff1f71.js.map",
+    "main.56206090.css.map": "/static/css/main.56206090.css.map",
+    "main.2c16476d.js.map": "/static/js/main.2c16476d.js.map",
     "453.8ab44547.chunk.js.map": "/static/js/453.8ab44547.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.efa1f7b1.css",
-    "static/js/main.16ff1f71.js"
+    "static/css/main.56206090.css",
+    "static/js/main.2c16476d.js"
   ]
 }
